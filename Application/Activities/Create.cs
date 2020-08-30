@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain;
@@ -13,8 +14,10 @@ namespace Application.Activities
         {
             public Guid Id { get; set; }
 
+            [Required]
             public string Title { get; set; }
 
+            [Required]
             public string Description { get; set; }
 
             public string Category { get; set; }
