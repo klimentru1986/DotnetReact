@@ -32,9 +32,22 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Unit>> Create([FromBody] Create.Command activity)
+        public async Task<ActionResult<Unit>> Create(Create.Command activity)
         {
             return await _mediator.Send(activity);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Unit>> Update(Guid id, Update.Command activity)
+        {
+            activity.Id = id;
+            return await _mediator.Send(activity);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Unit>> Delete(Guid id)
+        {
+            return await _mediator.Send(new Delete.Command { Id = id });
         }
     }
 }
