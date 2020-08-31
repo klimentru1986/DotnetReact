@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
+using FluentValidation.AspNetCore;
 
 namespace API.Extensions
 {
@@ -30,5 +31,6 @@ namespace API.Extensions
 
             return services;
         }
+
     }
 }

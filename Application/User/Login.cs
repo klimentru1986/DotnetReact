@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
@@ -15,6 +16,15 @@ namespace Application.User
             public string Email { get; set; }
 
             public string Password { get; set; }
+        }
+
+        public class LoginValidator : AbstractValidator<Query>
+        {
+            public LoginValidator()
+            {
+                RuleFor(x => x.Email).NotEmpty().WithMessage("email обязателен для заполненя");
+                RuleFor(x => x.Password).NotEmpty().WithMessage("пароль обязателен для заполненя");
+            }
         }
 
         public class Haldler : IRequestHandler<Query, AppUser>
