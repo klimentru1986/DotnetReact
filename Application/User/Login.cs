@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Exceptions;
 using Domain;
 using FluentValidation;
 using MediatR;
@@ -11,7 +12,7 @@ namespace Application.User
 {
     public class Login
     {
-        public class Query : IRequest<AppUser>
+        public class Query : IRequest<User>
         {
             public string Email { get; set; }
 
@@ -27,7 +28,7 @@ namespace Application.User
             }
         }
 
-        public class Haldler : IRequestHandler<Query, AppUser>
+        public class Haldler : IRequestHandler<Query, User>
         {
             private readonly UserManager<AppUser> _userManager;
             private readonly SignInManager<AppUser> _signInManager;
@@ -38,19 +39,25 @@ namespace Application.User
                 _signInManager = signInManager;
             }
 
-            public async Task<AppUser> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<User> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await _userManager.FindByEmailAsync(request.Email);
 
                 if (user == null)
-                    throw new Exception("Unauthorized");
+                    throw new RestException(HttpStatusCode.Unauthorized);
 
                 var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
-                if(!result.Succeeded)
-                    throw new Exception("Unauthorized");
+                if (!result.Succeeded)
+                    throw new RestException(HttpStatusCode.Unauthorized);
 
-                return user;
+                return new User
+                {
+                    DisplayName = user.DisplayName,
+                    Token = "",
+                    UserName = user.UserName,
+                    Image = null
+                };
             }
         }
     }
