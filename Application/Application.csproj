@@ -10,6 +10,7 @@
   <ItemGroup>
     <Folder Include="User\" />
     <Folder Include="Exceptions\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>

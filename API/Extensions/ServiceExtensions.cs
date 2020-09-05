@@ -6,6 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
 using FluentValidation.AspNetCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace API.Extensions
 {
@@ -25,9 +28,27 @@ namespace API.Extensions
         public static IServiceCollection AddIdentityServices(this IServiceCollection services)
         {
 
-            services.AddIdentity<AppUser, IdentityRole>()
+            services.AddIdentityCore<AppUser>()
                 .AddEntityFrameworkStores<DataContext>()
                 .AddSignInManager<SignInManager<AppUser>>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddJwtAuth(this IServiceCollection services)
+        {
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Seacret key Seacret key Seacret key Seacret key"));
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(opt =>
+                {
+                    opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = key,
+                        ValidateAudience = false,
+                        ValidateIssuer = false
+                    };
+                });
 
             return services;
         }
