@@ -11,7 +11,6 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
     public class ActivitiesController : ControllerBase
     {
         private readonly IMediator _mediator;

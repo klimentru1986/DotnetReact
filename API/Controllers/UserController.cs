@@ -3,12 +3,14 @@ using System.Threading.Tasks;
 using Application.User;
 using Domain;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [AllowAnonymous]
     public class UserController
     {
         private readonly IMediator _mediator;

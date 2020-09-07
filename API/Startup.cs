@@ -22,6 +22,8 @@ using Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace API
 {
@@ -40,8 +42,15 @@ namespace API
             services.AddDbConnection(Configuration)
                 .AddMediatR(typeof(List.Handler).Assembly)
                 .AddIdentityServices()
-                .AddJwtAuth()
-                .AddControllers()
+                .AddJwtAuth(Configuration["TokenKey"])
+                .AddControllers(opt =>
+                {
+                    var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+
+                    opt.Filters.Add(new AuthorizeFilter(policy));
+                })
                 .AddFluentValidationBuilder();
 
 

@@ -35,9 +35,9 @@ namespace API.Extensions
             return services;
         }
 
-        public static IServiceCollection AddJwtAuth(this IServiceCollection services)
+        public static IServiceCollection AddJwtAuth(this IServiceCollection services, string secretKey)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Seacret key Seacret key Seacret key Seacret key"));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(opt =>
                 {
