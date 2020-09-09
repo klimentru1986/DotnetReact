@@ -56,7 +56,8 @@ namespace API
 
 
             services
-                .AddScoped<IJwtGenerator, JwtGenerator>();
+                .AddScoped<IJwtGenerator, JwtGenerator>()
+                .AddScoped<IUserAccessor, UserAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
