@@ -24,6 +24,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using AutoMapper;
 
 namespace API
 {
@@ -41,6 +42,7 @@ namespace API
         {
             services.AddDbConnection(Configuration)
                 .AddMediatR(typeof(List.Handler).Assembly)
+                .AddAutoMapper(typeof(List.Handler))
                 .AddIdentityServices()
                 .AddJwtAuth(Configuration["TokenKey"])
                 .AddControllers(opt =>
