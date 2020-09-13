@@ -19,6 +19,7 @@ namespace API.Extensions
 
             services.AddDbContext<DataContext>(opt =>
             {
+                opt.UseLazyLoadingProxies();
                 opt.UseSqlite(configuration.GetConnectionString("DefaultConnection"));
             });
 

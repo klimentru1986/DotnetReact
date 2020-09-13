@@ -29,10 +29,7 @@ namespace Application.Activities
 
             public async Task<ActivityDto> Handle(Query request, CancellationToken cancellationToken)
             {
-                var activity = await _context.Activities
-                    .Include(a => a.UserActivities)
-                    .ThenInclude(ua => ua.AppUser)
-                    .SingleOrDefaultAsync(a => a.Id.Equals(request.Id));
+                var activity = await _context.Activities.FindAsync(request.Id);
 
 
                 return _mapper.Map<Activity, ActivityDto>(activity);
