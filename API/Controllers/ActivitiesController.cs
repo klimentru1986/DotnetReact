@@ -20,9 +20,9 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ActivityDto>>> List()
+        public async Task<ActionResult<PagedDto<ActivityDto>>> List([FromQuery] List.Query query)
         {
-            return await _mediator.Send(new List.Query());
+            return await _mediator.Send(query);
         }
 
         [HttpGet("{id}")]

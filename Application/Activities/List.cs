@@ -12,9 +12,13 @@ namespace Application.Activities
 {
     public class List
     {
-        public class Query : IRequest<List<ActivityDto>> { }
+        public class Query : IRequest<PagedDto<ActivityDto>>
+        {
+            public int? Skip { get; set; }
+            public int? Take { get; set; }
+        }
 
-        public class Handler : IRequestHandler<Query, List<ActivityDto>>
+        public class Handler : IRequestHandler<Query, PagedDto<ActivityDto>>
         {
 
             private readonly DataContext _context;
@@ -26,12 +30,22 @@ namespace Application.Activities
                 _mapper = mapper;
             }
 
-            public async Task<List<ActivityDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<PagedDto<ActivityDto>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var activities = await _context.Activities
+
+                var queriable = _context.Activities.AsQueryable();
+                var count = queriable.Count();
+
+                var activities = await queriable
+                    .Skip(request.Skip ?? 0)
+                    .Take(request.Take ?? count)
                     .ToListAsync();
 
-                return _mapper.Map<List<Activity>, List<ActivityDto>>(activities);
+                return new PagedDto<ActivityDto>
+                {
+                    Data = _mapper.Map<List<Activity>, List<ActivityDto>>(activities),
+                    Total = count
+                };
             }
         }
     }
