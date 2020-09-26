@@ -25,6 +25,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using AutoMapper;
+using API.SignalR;
 
 namespace API
 {
@@ -40,9 +41,10 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
             services.AddDbConnection(Configuration)
                 .AddMediatR(typeof(List.Handler).Assembly)
-                .AddAutoMapper(typeof(List.Handler))
+                .AddAutoMapper(typeof(List))
                 .AddIdentityServices()
                 .AddJwtAuth(Configuration["TokenKey"])
                 .AddControllers(opt =>
@@ -83,6 +85,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chat");
             });
         }
     }
